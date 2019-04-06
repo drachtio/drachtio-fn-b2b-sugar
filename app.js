@@ -7,11 +7,12 @@ const noopLogger = {debug: noop, info: noop, error: console.error};
 const CallManager = require('./lib/call-manager');
 
 function simring(logger) {
+  logger = logger || noopLogger;
+
   return function(req, res, uriList, opts, notifiers) {
     assert(req instanceof SipRequest);
     assert(res instanceof SipResponse);
     assert(Array.isArray(uriList));
-    const logger = logger || noopLogger;
 
     const manager = new CallManager({req, res, uriList, opts, notifiers, logger});
     return manager.simring();
