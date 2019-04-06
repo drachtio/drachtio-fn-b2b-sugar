@@ -4,11 +4,11 @@ Various utility functions that build on [drachtio-srf B2BUA](https://drachtio.or
 
 ### simring
 
-A forking outdial B2BUA that connects the caller to the first answer.
+A forking outdial B2BUA that connects the caller to the first endpoint that answers.
 
 The exported `simring` reference is a factory function that must be invoked to return another function that will perform the simring.  The method signature of the generated function is similar to [createB2BUA](https://drachtio.org/api#srf-create-b2bua), except that an array of sip URIs are provided instead of a single URI, and also the method returns a Promise but does not support callback usage.
 
-The exported `simring` function takes one optional parameter, which is a logger object that you can pass in.  A [pino](https://www.npmjs.com/package/pino) logger is example of a logger that can be passed in, but any object that exports `debug`, `info`, and `error` functions can be used for logging purposes.
+The exported `simring` function takes one optional parameter, which is a logger object that you can pass in.  A [pino](https://www.npmjs.com/package/pino) logger is example of a logger that can be passed in, but any object that exports `debug`, `info`, and `error` functions could be provided.  If no logger is passed, the only logging will be `console.error` on various error conditions.
 
 example usage:
 
@@ -26,7 +26,7 @@ srf.invite(async (req, res) {
 ```
 With logging
 ```js
-const logger = require('pino)();
+const logger = require('pino')();
 const {simring} = require('drachtio-fn-b2b-sugar');
 const doSimring = simring(logger);
 srf.invite(async (req, res) {
