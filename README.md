@@ -1,10 +1,12 @@
 # drachtio-fn-b2b-sugar
 
-Various utility functions that build on [drachtio-srf B2BUA](https://drachtio.org/api#srf-create-b2bua).
+A selection of useful and reusable functions dealing with common [B2BUA](https://drachtio.org/api#srf-create-b2bua) scenarios for the [drachtio](https://drachtio.org) SIP server.
 
-### simring
+## simring
 
-A forking outdial B2BUA that connects the caller to the first endpoint that answers.
+A common need is to do a simultaneous ring of multiple SIP endpoints in response to an incoming call, connecting the caller to the first answering device and terminating the other requests.
+
+This function provides a forking outdial B2BUA that connects the caller to the first endpoint that answers.
 
 ##### basic usage
 In basic usage, the exported `simring` function acts almost exactly like [Srf#createB2BUA](https://drachtio.org/api#srf-create-b2bua), except that you pass an array of sip URIs rather than a single sip URI.
