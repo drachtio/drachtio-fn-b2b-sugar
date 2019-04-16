@@ -66,7 +66,7 @@ class Simring {
   }
 
   addUri(uri) {
-    return this.CallManager.addUri(uri);
+    return this.manager.addUri(uri);
   }
 
 }
