@@ -40,5 +40,35 @@ function simring(...args) {
   return manager.simring();
 }
 
+class Simring {
+  constructor(req, res, uriList, opts, notifiers) {
+    const callOpts = {
+      req,
+      res,
+      uriList: typeof uriList == 'string' ? [uriList] : (uriList || []),
+      opts: opts || {},
+      notifiers: notifiers || {},
+      logger: noopLogger
+    } ;
+    this.manager = new CallManager(callOpts);
+  }
 
-module.exports = {simring};
+  set logger(logger) {
+    this.manager.logger = logger;
+  }
+
+  get finished() {
+    return this.manager.finished;
+  }
+
+  start(anotherUriList) {
+    return this.this.manager.simring(anotherUriList);
+  }
+
+  addUri(uri) {
+    return this.CallManager.addUri(uri);
+  }
+
+}
+
+module.exports = {simring, Simring};
