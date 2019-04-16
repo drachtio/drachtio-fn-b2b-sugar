@@ -25,7 +25,7 @@ function simring(...args) {
 
   assert.ok(args.length >= 3 &&
     args[0] instanceof SipRequest &&
-    args[1] instanceof SipResponse && 
+    args[1] instanceof SipResponse &&
     Array.isArray(args[2]), 'invalid simring arguments: usage: simring(req, res, uriArray..)');
 
   const opts = {
@@ -62,7 +62,7 @@ class Simring {
   }
 
   start(anotherUriList) {
-    return this.this.manager.simring(anotherUriList);
+    return this.manager.simring(anotherUriList);
   }
 
   addUri(uri) {
