@@ -61,6 +61,10 @@ class Simring {
     return this.manager.finished;
   }
 
+  get started() {
+    return this.manager.started;
+  }
+
   start(anotherUriList) {
     return this.manager.simring(anotherUriList);
   }
