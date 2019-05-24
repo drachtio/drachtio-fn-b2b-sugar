@@ -63,3 +63,41 @@ srf.invite(async (req, res) {
     if (!simring.finished) simring.addUri('sip:789@example.com');
   });
 ```
+
+## transfer (REFER handler)
+
+Handle REFER messasges in your B2B dialogs.
+
+```js
+const {transfer} = require('drachtio-fn-b2b-sugar');
+srf.invite(async (req, res) {
+  const {uas, uac} = await srf.createB2BUA(req, res, destination, {localSdpB: req.body});
+  uac.on('refer', (req, res) => {
+    const opts = {
+      req, // required
+      res,  // required
+      transfereeDialog: uas, // required
+      transferorDialog: uac, // required
+      // auth: true, // authorize transferor - optional
+      // authLookup: referAuthLookup, // optional, unless auth is true
+      // destinationLookUp: this.referDestinationLookup, // optional
+    }
+    const transferTargetDialog = await transfer(opts);
+  });
+
+  uas.on('refer', (req, res) => {
+    console.log(req.msg.raw);
+    const opts = {
+      req, // required
+      res,  // required
+      transfereeDialog: uas, // required
+      transferorDialog: uac, // required
+      // auth: true, // authorize transferor - optional
+      // authLookup: referAuthLookup, // optional, unless auth is true
+      // destinationLookUp: this.referDestinationLookup, // optional
+    }
+    transfer(opts);
+    const transferTargetDialog = await transfer(opts);
+  });
+});
+```

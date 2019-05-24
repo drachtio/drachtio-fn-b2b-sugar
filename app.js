@@ -5,6 +5,7 @@ const assert = require('assert');
 const noop = () => {};
 const noopLogger = {debug: noop, info: noop, error: console.error};
 const CallManager = require('./lib/call-manager');
+const ReferHandler = require ('./lib/refer-handler');
 
 function simring(...args) {
   if (args.length === 1) {
@@ -38,6 +39,11 @@ function simring(...args) {
   };
   const manager = new CallManager(opts);
   return manager.simring();
+}
+
+function transfer(opts) {
+  const referHandler = new ReferHandler(opts);
+  return referHandler.transfer();
 }
 
 class Simring {
@@ -75,4 +81,4 @@ class Simring {
 
 }
 
-module.exports = {simring, Simring};
+module.exports = {simring, Simring, transfer};
