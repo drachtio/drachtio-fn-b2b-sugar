@@ -76,28 +76,28 @@ srf.invite(async (req, res) {
     const opts = {
       req, // required
       res,  // required
-      transfereeDialog: uas, // required
-      transferorDialog: uac, // required
-      // auth: true, // authorize transferor - optional
+      transferor: uac, // required
       // authLookup: referAuthLookup, // optional, unless auth is true
       // destinationLookUp: this.referDestinationLookup, // optional
     }
-    const transferTargetDialog = await transfer(opts);
+    const { transferee, transferTarget } = await transfer(opts);
   });
 
   uas.on('refer', (req, res) => {
-    console.log(req.msg.raw);
     const opts = {
       req, // required
       res,  // required
-      transfereeDialog: uas, // required
-      transferorDialog: uac, // required
-      // auth: true, // authorize transferor - optional
+      transferor: uas, // required
       // authLookup: referAuthLookup, // optional, unless auth is true
       // destinationLookUp: this.referDestinationLookup, // optional
     }
     transfer(opts);
-    const transferTargetDialog = await transfer(opts);
+    const { transferee, transferTarget } = await transfer(opts);
   });
 });
 ```
+
+### Options
+
+* authLookup: function - used to verify endpoint sending REFER is allowed to REFER calls in your environment
+* destinationLookUp: function - used to determine what IP address (or domain) to use when calling the transferTarget (the person being transferred to). If not set, whatever is put in the `Refer-To` uri will be used
