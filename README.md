@@ -70,30 +70,52 @@ Handle REFER messasges in your B2B dialogs.
 
 ```js
 const {transfer} = require('drachtio-fn-b2b-sugar');
-srf.invite(async (req, res) {
-  const {uas, uac} = await srf.createB2BUA(req, res, destination, {localSdpB: req.body});
-  uac.on('refer', (req, res) => {
-    const opts = {
-      req, // required
-      res,  // required
-      transferor: uac, // required
-      // authLookup: referAuthLookup, // optional, unless auth is true
-      // destinationLookUp: this.referDestinationLookup, // optional
-    }
-    const { transferee, transferTarget } = await transfer(opts);
-  });
 
-  uas.on('refer', (req, res) => {
-    const opts = {
-      req, // required
-      res,  // required
-      transferor: uas, // required
-      // authLookup: referAuthLookup, // optional, unless auth is true
-      // destinationLookUp: this.referDestinationLookup, // optional
-    }
-    transfer(opts);
-    const { transferee, transferTarget } = await transfer(opts);
-  });
+const auth = (username) => {
+  // Valid username can make REFER/transfers
+  //if (username == 'goodGuy') {
+  //  return true;
+  //} else {
+  //  return false;
+  //}
+}
+
+const destLookUp = (username) => {
+  // do lookup on username here
+  // to get an IP address or domain
+  // const ipAddress = someLook();
+  // return ipAddress;
+};
+
+srf.invite(async (req, res) {
+  try {
+    const {uas, uac} = await srf.createB2BUA(req, res, destination, {localSdpB: req.body});
+    uac.on('refer', async (req, res) => {
+      const opts = {
+        srf, // required
+        req, // required
+        res,  // required
+        transferor: uac, // required
+        // authLookup: referAuthLookup, // optional, unless auth is true
+        // destinationLookUp: this.referDestinationLookup, // optional
+      }
+      const { transfereeDialog, transferTargetDialog } = await transfer(opts);
+    });
+
+    uas.on('refer', async (req, res) => {
+      const opts = {
+        srf, // required
+        req, // required
+        res,  // required
+        transferor: uas, // required
+        authLookup: auth, // optional, unless auth is true
+        destinationLookUp: destLookUp, // optional
+      }
+      const { transfereeDialog, transferTargetDialog } = await transfer(opts);
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 ```
 
