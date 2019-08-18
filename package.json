@@ -1,6 +1,6 @@
 {
   "name": "drachtio-fn-b2b-sugar",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "drachtio B2B function that forks multiple simultaneous call attempts",
   "main": "app.js",
   "scripts": {
@@ -16,6 +16,6 @@
     "drachtio-srf": "^4.4.x"
   },
   "devDependencies": {
-    "drachtio-srf": "^4.4.8"
+    "drachtio-srf": "^4.4.15"
   }
 }
