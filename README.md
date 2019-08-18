@@ -136,5 +136,10 @@ forwardInDialogRequests(uas, ['info', 'options', 'notify']);
 ```
 The list of request types to forward is optional; if not specified all request types (except, as per above, INVITEs and UPDATEs) will for forwarded:
 ```
-forwardInDialogRequests(uas);
+forwardInDialogRequests(uas); // forwards all requests (except INVITE and UPDATE)
 ```
+
+Note that although you only provide one of the paired dialogs as an argument, in-dialog requests are forwarded in both directions (e.g. though you may specify 'uas', requests received on 'uac' are also forwarded to the uas).
+
+Also note that you can still attach your own event listeners to the in-dialog requests (just don't try to forward the requests in your event handler, since that will already be taken care of).
+ 
