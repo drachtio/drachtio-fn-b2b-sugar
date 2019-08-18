@@ -10,6 +10,10 @@
     "sip",
     "drachtio"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davehorton/drachtio-fn-b2b-sugar.git"
+  },
   "author": "Dave Horton",
   "license": "MIT",
   "peerDependencies": {
