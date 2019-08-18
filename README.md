@@ -123,3 +123,18 @@ srf.invite(async (req, res) {
 
 * authLookup: function - used to verify endpoint sending REFER is allowed to REFER calls in your environment
 * destinationLookUp: function - used to determine what IP address (or domain) to use when calling the transferTarget (the person being transferred to). If not set, whatever is put in the `Refer-To` uri will be used
+
+## forwardInDialogRequests
+
+This function forwards in-dialog requests received on one Dialog in a B2B to the paired Dialog.  It does _not_ handle in-dialog INVITEs (e.g. re-INVITEs) or UPDATE requests, however, as these usually require application-specific processing.
+
+The signature is: `forwardInDialogRequests(dlg, requestTypes)`, e.g.:
+```
+const {forwardInDialogRequests} = require('drachtio-fn-b2b-sugar');
+const {uas, uac} = await srf.createB2BUA(..);
+forwardInDialogRequests(uas, ['info', 'options', 'notify']);
+```
+The list of request types to forward is optional; if not specified all request types (except, as per above, INVITEs and UPDATEs) will for forwarded:
+```
+forwardInDialogRequests(uas);
+```

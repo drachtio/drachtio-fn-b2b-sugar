@@ -6,6 +6,7 @@ const noop = () => {};
 const noopLogger = {debug: noop, info: noop, error: console.error};
 const CallManager = require('./lib/call-manager');
 const ReferHandler = require ('./lib/refer-handler');
+const forwardInDialogRequests = require('./lib/dialog-request-forwarder');
 
 function simring(...args) {
   if (args.length === 1) {
@@ -81,4 +82,4 @@ class Simring {
 
 }
 
-module.exports = {simring, Simring, transfer};
+module.exports = {simring, Simring, transfer, forwardInDialogRequests};
