@@ -71,12 +71,12 @@ class Simring {
     return this.manager.started;
   }
 
-  start(anotherUriList) {
-    return this.manager.simring(anotherUriList);
+  start(anotherUriList, callOpts) {
+    return this.manager.simring(anotherUriList, callOpts);
   }
 
-  addUri(uri) {
-    return this.manager.addUri(uri);
+  addUri(uri, callOpts) {
+    return this.manager.addUri(uri, callOpts);
   }
 
 }
