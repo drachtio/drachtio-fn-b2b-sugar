@@ -61,7 +61,7 @@ srf.invite(async (req, res) {
 ```
 
 ## Simring class
-A more advanced usage is to to start a simring against a list of endpoints, and then later (before any have answered) add one or more new endpoints to the simring list.  
+A more advanced usage is to to start a simring against a list of endpoints, and then later (before any have answered) add one or more new endpoints to the simring list.
 
 This would be useful, for instance, in a scenario where you are ringing all of the registered devices for a user and while doing that a new device registers that you also want to include.
 
