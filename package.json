@@ -13,9 +13,9 @@
   "author": "Dave Horton",
   "license": "MIT",
   "peerDependencies": {
-    "drachtio-srf": "^4.4.x"
+    "drachtio-srf": "^4.4.21"
   },
   "devDependencies": {
-    "drachtio-srf": "^4.4.8"
+    "drachtio-srf": "^4.4.21"
   }
 }

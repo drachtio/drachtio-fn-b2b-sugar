@@ -1,5 +1,9 @@
 # drachtio-fn-b2b-sugar
 
+## :bell: :bell: Warning :bell: :bell:
+drachtio-fn-b2b-sugar now gives reasons on cancellations. In order to support that you need to use a version of drachtip-srf above 4.4.21
+If you try to use this module without using the correct version of drachtio-srf you will get rejected promises due to errors from within drachtio-srf
+
 A selection of useful and reusable functions dealing with common [B2BUA](https://drachtio.org/api#srf-create-b2bua) scenarios for the [drachtio](https://drachtio.org) SIP server.
 
 ## simring function
