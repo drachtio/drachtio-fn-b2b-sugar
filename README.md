@@ -40,6 +40,26 @@ srf.invite(async (req, res) {
   }
 });
 ```
+
+##### Timouts values & Global vs individual leg timeouts
+
+By default the timeout you can pass to `simring` is assigned to each outbound leg in the fork. The default value is `20` seconds. You may want to change this so that it's a global timeout rather than individual timeouts. You can pass in `globalTimeout` within the `opts` object. You can also change the timeout value by setting `timeout` in that object too; it's set in seconds.
+
+```js
+const {simring} = require('drachtio-fn-b2b-sugar');
+srf.invite(async (req, res) {
+  try {
+    const {uas, uac} = await simring(req, res, ['sip:123@example.com', 'sip:456@example.com'], {
+      globalTimeout: true,
+      timeout: 30
+    });
+    console.info(`successfully connected to ${uas.remote.uri}`);
+  } catch (err) {
+    console.log(err, 'Error connecting call');
+  }
+});
+```
+
 ## Simring class
 A more advanced usage is to to start a simring against a list of endpoints, and then later (before any have answered) add one or more new endpoints to the simring list.  
 
@@ -76,6 +96,10 @@ Emits the uri that was eventually successful. - `uri`
 
 Emits an object containing the error and the uri that failed - `{err, uri}`
 
+##### Diasble the timeout and Promise rejection
+
+You may want to disable simringer's ability to handle a timeout completely as well as decide when your simringer is indeed finished.
+This might be the case if you have an active simringer but you want to add a URI later on. Without the ability to handle this decison yourself lets say you add a URI straight away and it fails (500 response), the simringer will see that as a failed simringer and reject the returned promise. But you're still within your timeout value within your app and you want to add another URI to the now failed simringer. The way to handle this is to take control of the timeout yourself by passing in a timeout value of `null` or `false`. In this case, you now need to cancel the Simring class yourself using the exported `Simring#cancel` method.
 
 ## transfer (REFER handler)
 

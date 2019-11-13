@@ -90,6 +90,9 @@ class Simring extends Emitter{
     return this.manager.addUri(uri, callOpts);
   }
 
+  cancel() {
+    return this.manager.cancel();
+  }
 }
 
 module.exports = {simring, Simring, transfer, forwardInDialogRequests};
