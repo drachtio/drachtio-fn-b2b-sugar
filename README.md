@@ -8,7 +8,7 @@ A common need is to do a simultaneous ring of multiple SIP endpoints in response
 
 This function provides a forking outdial B2BUA that connects the caller to the first endpoint that answers.
 
-##### basic usage
+##### Basic usage
 In basic usage, the exported `simring` function acts almost exactly like [Srf#createB2BUA](https://drachtio.org/api#srf-create-b2bua), except that you pass an array of sip URIs rather than a single sip URI.
 ```js
 const {simring} = require('drachtio-fn-b2b-sugar');
@@ -23,7 +23,7 @@ srf.invite(async (req, res) {
 ```
 All of the options that you can pass to [Srf#createB2BUA](https://drachtio.org/api#srf-create-b2bua) can be passed to `simring`.
 
-##### with logging
+##### With logging
 If you want logging from simring, you can treat the exported `simring` reference as a factory function that you invoke with a single argument, that being the logger object that you want to be used.  That object must provide 'debug', 'info', and 'error' functions (e.g. [pino](https://www.npmjs.com/package/pino)).
 
 Invoking the factory function then returns another function that does the actual simring.
@@ -57,12 +57,25 @@ srf.invite(async (req, res) {
       console.info(`successfully connected to ${uas.remote.uri}`);
     })
     .catch((err) => console.log(err, 'Error connecting call'));
-  
+
   // assume we are alerted when a new device registers
   someEmitter.on('someRegisterEvent', () => {
     if (!simring.finished) simring.addUri('sip:789@example.com');
   });
 ```
+
+##### Events
+
+The Simring class emits two different events - `finalSuccess` and `failure`
+
+###### finalSuccess
+
+Emits the uri that was eventually successful. - `uri`
+
+###### failure
+
+Emits an object containing the error and the uri that failed - `{err, uri}`
+
 
 ## transfer (REFER handler)
 
