@@ -49,8 +49,9 @@ function transfer(opts) {
   return referHandler.transfer();
 }
 
-class Simring extends Emitter{
+class Simring extends Emitter {
   constructor(req, res, uriList, opts, notifiers) {
+    super();
     const callOpts = {
       req,
       res,
