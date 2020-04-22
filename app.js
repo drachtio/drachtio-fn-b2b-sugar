@@ -2,11 +2,13 @@ const Srf = require('drachtio-srf');
 const SipRequest = Srf.SipRequest;
 const SipResponse = Srf.SipResponse;
 const assert = require('assert');
+const Emitter = require('events');
 const noop = () => {};
 const noopLogger = {debug: noop, info: noop, error: console.error};
 const CallManager = require('./lib/call-manager');
 const ReferHandler = require ('./lib/refer-handler');
 const forwardInDialogRequests = require('./lib/dialog-request-forwarder');
+
 
 function simring(...args) {
   if (args.length === 1) {
@@ -47,8 +49,9 @@ function transfer(opts) {
   return referHandler.transfer();
 }
 
-class Simring {
+class Simring extends Emitter {
   constructor(req, res, uriList, opts, notifiers) {
+    super();
     const callOpts = {
       req,
       res,
@@ -56,8 +59,16 @@ class Simring {
       opts: opts || {},
       notifiers: notifiers || {},
       logger: noopLogger
-    } ;
+    };
     this.manager = new CallManager(callOpts);
+
+    this.on('newListener', (event, listener) => {
+      this.manager.addListener(event, listener);
+    });
+
+    this.on('removeListener', (event, listener) => {
+      this.manager.removeListener(event, listener);
+    });
   }
 
   set logger(logger) {
@@ -80,6 +91,9 @@ class Simring {
     return this.manager.addUri(uri, callOpts);
   }
 
+  cancel() {
+    return this.manager.cancel();
+  }
 }
 
 module.exports = {simring, Simring, transfer, forwardInDialogRequests};

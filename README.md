@@ -8,7 +8,7 @@ A common need is to do a simultaneous ring of multiple SIP endpoints in response
 
 This function provides a forking outdial B2BUA that connects the caller to the first endpoint that answers.
 
-##### basic usage
+##### Basic usage
 In basic usage, the exported `simring` function acts almost exactly like [Srf#createB2BUA](https://drachtio.org/api#srf-create-b2bua), except that you pass an array of sip URIs rather than a single sip URI.
 ```js
 const {simring} = require('drachtio-fn-b2b-sugar');
@@ -23,7 +23,7 @@ srf.invite(async (req, res) {
 ```
 All of the options that you can pass to [Srf#createB2BUA](https://drachtio.org/api#srf-create-b2bua) can be passed to `simring`.
 
-##### with logging
+##### With logging
 If you want logging from simring, you can treat the exported `simring` reference as a factory function that you invoke with a single argument, that being the logger object that you want to be used.  That object must provide 'debug', 'info', and 'error' functions (e.g. [pino](https://www.npmjs.com/package/pino)).
 
 Invoking the factory function then returns another function that does the actual simring.
@@ -40,8 +40,28 @@ srf.invite(async (req, res) {
   }
 });
 ```
+
+##### Timouts values & Global vs individual leg timeouts
+
+By default the timeout you can pass to `simring` is assigned to each outbound leg in the fork. The default value is `20` seconds. You may want to change this so that it's a global timeout rather than individual timeouts. You can pass in `globalTimeout` within the `opts` object. You can also change the timeout value by setting `timeout` in that object too; it's set in seconds.
+
+```js
+const {simring} = require('drachtio-fn-b2b-sugar');
+srf.invite(async (req, res) {
+  try {
+    const {uas, uac} = await simring(req, res, ['sip:123@example.com', 'sip:456@example.com'], {
+      globalTimeout: true,
+      timeout: 30
+    });
+    console.info(`successfully connected to ${uas.remote.uri}`);
+  } catch (err) {
+    console.log(err, 'Error connecting call');
+  }
+});
+```
+
 ## Simring class
-A more advanced usage is to to start a simring against a list of endpoints, and then later (before any have answered) add one or more new endpoints to the simring list.  
+A more advanced usage is to to start a simring against a list of endpoints, and then later (before any have answered) add one or more new endpoints to the simring list.
 
 This would be useful, for instance, in a scenario where you are ringing all of the registered devices for a user and while doing that a new device registers that you also want to include.
 
@@ -57,12 +77,29 @@ srf.invite(async (req, res) {
       console.info(`successfully connected to ${uas.remote.uri}`);
     })
     .catch((err) => console.log(err, 'Error connecting call'));
-  
+
   // assume we are alerted when a new device registers
   someEmitter.on('someRegisterEvent', () => {
     if (!simring.finished) simring.addUri('sip:789@example.com');
   });
 ```
+
+##### Events
+
+The Simring class emits two different events - `finalSuccess` and `failure`
+
+###### finalSuccess
+
+Emits the uri that was eventually successful. - `uri`
+
+###### failure
+
+Emits an object containing the error and the uri that failed - `{err, uri}`
+
+##### Diasble the timeout and Promise rejection
+
+You may want to disable simringer's ability to handle a timeout completely as well as decide when your simringer is indeed finished.
+This might be the case if you have an active simringer but you want to add a URI later on. Without the ability to handle this decison yourself lets say you add a URI straight away and it fails (500 response), the simringer will see that as a failed simringer and reject the returned promise. But you're still within your timeout value within your app and you want to add another URI to the now failed simringer. The way to handle this is to take control of the timeout yourself by passing in a timeout value of `null` or `false`. In this case, you now need to cancel the Simring class yourself using the exported `Simring#cancel` method.
 
 ## transfer (REFER handler)
 
