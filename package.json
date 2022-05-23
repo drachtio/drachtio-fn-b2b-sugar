@@ -1,10 +1,11 @@
 {
   "name": "drachtio-fn-b2b-sugar",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "description": "drachtio B2B function that forks multiple simultaneous call attempts",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jslint": "eslint app.js lib"
   },
   "keywords": [
     "sip",
@@ -17,9 +18,11 @@
   "author": "Dave Horton",
   "license": "MIT",
   "peerDependencies": {
-    "drachtio-srf": "^4.4.x"
+    "drachtio-srf": "^4.5.x"
   },
   "devDependencies": {
-    "drachtio-srf": "^4.4.15"
+    "drachtio-srf": "^4.5.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-promise": "^4.3.1"
   }
 }
