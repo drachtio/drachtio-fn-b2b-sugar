@@ -18,7 +18,7 @@
   "author": "Dave Horton",
   "license": "MIT",
   "devDependencies": {
-    "drachtio-srf": "^4.5.0",
+    "drachtio-srf": "^5.0.1",
     "eslint": "^7.32.0",
     "eslint-plugin-promise": "^4.3.1"
   }
